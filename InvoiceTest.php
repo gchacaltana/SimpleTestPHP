@@ -22,7 +22,7 @@ class InvoiceTestCase extends UnitTestCase
     
     function testSubTotal()
     {
-        $this->assertTrue(is_numeric($this->obj->getSubtotal()));
+        $this->assertTrue(is_numeric($this->obj->getSubtotal()),"Se esperaba un valor numérico");
     }
     
     function testTaxDefault()
