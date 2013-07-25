@@ -7,8 +7,8 @@
  * @name OperacionesMatematicasTestCase
  * @category UnitTestCase
  */
-require_once('simpletest/autorun.php');
-require_once('OperacionesMatematicas.php');
+require_once(dirname(__FILE__) . '/simpletest/autorun.php');
+require_once(dirname(__FILE__) . '/OperacionesMatematicas.php');
 
 class OperacionesMatematicasTestCase extends UnitTestCase
 {
@@ -35,7 +35,7 @@ class OperacionesMatematicasTestCase extends UnitTestCase
     {
         $this->assertEqual(108, $this->obj->multiplicar());
     }
-    
+
     /**
      * 
      */

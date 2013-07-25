@@ -7,8 +7,8 @@
  * @name InvoiceTestCase
  * @category UnitTestCase
  */
-require_once('simpletest/autorun.php');
-require_once('Invoice.php');
+require_once(dirname(__FILE__) . 'simpletest/autorun.php');
+require_once(dirname(__FILE__) . '/Invoice.php');
 
 class InvoiceTestCase extends UnitTestCase
 {
@@ -19,12 +19,12 @@ class InvoiceTestCase extends UnitTestCase
     {
         $this->obj = new Invoice(2000, null, 5);
     }
-    
+
     function testSubTotal()
     {
-        $this->assertTrue(is_numeric($this->obj->getSubtotal()),"Se esperaba un valor numérico");
+        $this->assertTrue(is_numeric($this->obj->getSubtotal()), "Se esperaba un valor numérico");
     }
-    
+
     function testTaxDefault()
     {
         $this->assertEqual(360, $this->obj->getTax());
@@ -34,9 +34,10 @@ class InvoiceTestCase extends UnitTestCase
     {
         $this->assertEqual(2260, $this->obj->getTotal());
     }
-    
+
     function testTaxAmount()
     {
         $this->assertEqual(100, $this->obj->getDiscountAmount());
     }
+
 }
