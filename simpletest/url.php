@@ -1,16 +1,16 @@
 <?php
+
 /**
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
  *  @version    $Id: url.php 2011 2011-04-29 08:22:48Z pp11 $
  */
-
-/**#@+
+/* * #@+
  *  include other SimpleTest class files
  */
 require_once(dirname(__FILE__) . '/encoding.php');
-/**#@-*/
+/* * #@- */
 
 /**
  *    URL parser to replace parse_url() PHP function which
@@ -23,6 +23,7 @@ require_once(dirname(__FILE__) . '/encoding.php');
  *    @subpackage WebTester
  */
 class SimpleUrl {
+
     private $scheme;
     private $username;
     private $password;
@@ -63,7 +64,7 @@ class SimpleUrl {
                 $this->host = false;
             } else {
                 $this->host = $host_parts[1];
-                $this->port = (integer)$host_parts[2];
+                $this->port = (integer) $host_parts[2];
             }
         }
         $this->path = $this->chompPath($url);
@@ -82,7 +83,7 @@ class SimpleUrl {
     protected function chompCoordinates(&$url) {
         if (preg_match('/(.*)\?(\d+),(\d+)$/', $url, $matches)) {
             $url = $matches[1];
-            return array((integer)$matches[2], (integer)$matches[3]);
+            return array((integer) $matches[2], (integer) $matches[3]);
         }
         return array(false, false);
     }
@@ -122,8 +123,8 @@ class SimpleUrl {
             $url = $prefix . $matches[2];
             $parts = explode(":", $matches[1]);
             return array(
-                    urldecode($parts[0]),
-                    isset($parts[1]) ? urldecode($parts[1]) : false);
+                urldecode($parts[0]),
+                isset($parts[1]) ? urldecode($parts[1]) : false);
         }
         $url = $prefix . $url;
         return array(false, false);
@@ -271,7 +272,7 @@ class SimpleUrl {
      *    @access public
      */
     function getPath() {
-        if (! $this->path && $this->host) {
+        if (!$this->path && $this->host) {
             return '/';
         }
         return $this->path;
@@ -284,7 +285,7 @@ class SimpleUrl {
      *    @access public
      */
     function getPage() {
-        if (! preg_match('/([^\/]*?)$/', $this->getPath(), $matches)) {
+        if (!preg_match('/([^\/]*?)$/', $this->getPath(), $matches)) {
             return false;
         }
         return $matches[1];
@@ -296,7 +297,7 @@ class SimpleUrl {
      *    @access public
      */
     function getBasePath() {
-        if (! preg_match('/(.*\/)[^\/]*?$/', $this->getPath(), $matches)) {
+        if (!preg_match('/(.*\/)[^\/]*?$/', $this->getPath(), $matches)) {
             return false;
         }
         return $matches[1];
@@ -323,8 +324,8 @@ class SimpleUrl {
             $this->x = $this->y = false;
             return;
         }
-        $this->x = (integer)$x;
-        $this->y = (integer)$y;
+        $this->x = (integer) $x;
+        $this->y = (integer) $y;
     }
 
     /**
@@ -438,15 +439,15 @@ class SimpleUrl {
             // URIs to local file paths, but that requires more research.
             $scheme = 'file://';
         }
-        if ($this->getPort() && $this->getPort() != 80 ) {
-            $port = ':'.$this->getPort();
+        if ($this->getPort() && $this->getPort() != 80) {
+            $port = ':' . $this->getPort();
         }
 
         if (substr($this->path, 0, 1) == '/') {
             $path = $this->normalisePath($this->path);
         }
         $encoded = $this->getEncodedRequest();
-        $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
+        $fragment = $this->getFragment() ? '#' . $this->getFragment() : '';
         $coords = $this->getX() === false ? '' : '?' . $this->getX() . ',' . $this->getY();
         return "$scheme$identity$host$port$path$encoded$fragment$coords";
     }
@@ -459,7 +460,7 @@ class SimpleUrl {
      *    @access public
      */
     function makeAbsolute($base) {
-        if (! is_object($base)) {
+        if (!is_object($base)) {
             $base = new SimpleUrl($base);
         }
         if ($this->getHost()) {
@@ -467,7 +468,7 @@ class SimpleUrl {
             $host = $this->getHost();
             $port = $this->getPort() ? ':' . $this->getPort() : '';
             $identity = $this->getIdentity() ? $this->getIdentity() . '@' : '';
-            if (! $identity) {
+            if (!$identity) {
                 $identity = $base->getIdentity() ? $base->getIdentity() . '@' : '';
             }
         } else {
@@ -478,7 +479,7 @@ class SimpleUrl {
         }
         $path = $this->normalisePath($this->extractAbsolutePath($base));
         $encoded = $this->getEncodedRequest();
-        $fragment = $this->getFragment() ? '#'. $this->getFragment() : '';
+        $fragment = $this->getFragment() ? '#' . $this->getFragment() : '';
         $coords = $this->getX() === false ? '' : '?' . $this->getX() . ',' . $this->getY();
         return new SimpleUrl("$scheme://$identity$host$port$path$encoded$fragment$coords");
     }
@@ -494,7 +495,7 @@ class SimpleUrl {
         if ($this->getHost()) {
             return $this->path;
         }
-        if (! $this->isRelativePath($this->path)) {
+        if (!$this->isRelativePath($this->path)) {
             return $this->path;
         }
         if ($this->path) {
@@ -546,5 +547,7 @@ class SimpleUrl {
     static function getAllTopLevelDomains() {
         return 'com|edu|net|org|gov|mil|int|biz|info|name|pro|aero|coop|museum';
     }
+
 }
+
 ?>

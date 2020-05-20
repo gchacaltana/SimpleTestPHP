@@ -1,18 +1,18 @@
 <?php
+
 /**
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
  *  @version    $Id: errors.php 2011 2011-04-29 08:22:48Z pp11 $
  */
-
-/**#@+
+/* * #@+
  * Includes SimpleTest files.
  */
 require_once dirname(__FILE__) . '/invoker.php';
 require_once dirname(__FILE__) . '/test_case.php';
 require_once dirname(__FILE__) . '/expectation.php';
-/**#@-*/
+/* * #@- */
 
 /**
  *    Extension that traps errors into an error queue.
@@ -56,6 +56,7 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
         $queue->setTestCase($test);
         return $queue;
     }
+
 }
 
 /**
@@ -65,6 +66,7 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator {
  *    @subpackage   UnitTester
  */
 class SimpleErrorQueue {
+
     private $queue;
     private $expectation_queue;
     private $test;
@@ -149,8 +151,7 @@ class SimpleErrorQueue {
         if ($expectation = $this->extractExpectation()) {
             list($expected, $message) = $expectation;
             $this->test->assert($expected, $content, sprintf(
-                    $message,
-                    "%s -> PHP error [$content] severity [" .
+                            $message, "%s -> PHP error [$content] severity [" .
                             $this->getSeverityAsString($severity) .
                             "] in [$filename] line [$line]"));
         } else {
@@ -195,18 +196,18 @@ class SimpleErrorQueue {
      */
     static function getSeverityAsString($severity) {
         static $map = array(
-                E_STRICT => 'E_STRICT',
-                E_ERROR => 'E_ERROR',
-                E_WARNING => 'E_WARNING',
-                E_PARSE => 'E_PARSE',
-                E_NOTICE => 'E_NOTICE',
-                E_CORE_ERROR => 'E_CORE_ERROR',
-                E_CORE_WARNING => 'E_CORE_WARNING',
-                E_COMPILE_ERROR => 'E_COMPILE_ERROR',
-                E_COMPILE_WARNING => 'E_COMPILE_WARNING',
-                E_USER_ERROR => 'E_USER_ERROR',
-                E_USER_WARNING => 'E_USER_WARNING',
-                E_USER_NOTICE => 'E_USER_NOTICE');
+            E_STRICT => 'E_STRICT',
+            E_ERROR => 'E_ERROR',
+            E_WARNING => 'E_WARNING',
+            E_PARSE => 'E_PARSE',
+            E_NOTICE => 'E_NOTICE',
+            E_CORE_ERROR => 'E_CORE_ERROR',
+            E_CORE_WARNING => 'E_CORE_WARNING',
+            E_COMPILE_ERROR => 'E_COMPILE_ERROR',
+            E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+            E_USER_ERROR => 'E_USER_ERROR',
+            E_USER_WARNING => 'E_USER_WARNING',
+            E_USER_NOTICE => 'E_USER_NOTICE');
         if (defined('E_RECOVERABLE_ERROR')) {
             $map[E_RECOVERABLE_ERROR] = 'E_RECOVERABLE_ERROR';
         }
@@ -215,6 +216,7 @@ class SimpleErrorQueue {
         }
         return $map[$severity];
     }
+
 }
 
 /**
@@ -252,7 +254,7 @@ function SimpleTestErrorHandler($severity, $message, $filename = null, $line = n
  *  @return boolean             True if genuine failure.
  */
 function IsNotCausedBySimpleTest($message) {
-    return ! preg_match('/returned by reference/', $message);
+    return !preg_match('/returned by reference/', $message);
 }
 
 /**
@@ -262,6 +264,7 @@ function IsNotCausedBySimpleTest($message) {
  *  @return boolean             True if genuine failure.
  */
 function IsNotTimeZoneNag($message) {
-    return ! preg_match('/not safe to rely .* timezone settings/', $message);
+    return !preg_match('/not safe to rely .* timezone settings/', $message);
 }
+
 ?>

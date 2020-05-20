@@ -1,24 +1,24 @@
 <?php
+
 /**
  *  Base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
  *  @version    $Id: user_agent.php 2039 2011-11-30 18:16:15Z pp11 $
  */
-
-/**#@+
+/* * #@+
  *  include other SimpleTest class files
  */
 require_once(dirname(__FILE__) . '/cookies.php');
 require_once(dirname(__FILE__) . '/http.php');
 require_once(dirname(__FILE__) . '/encoding.php');
 require_once(dirname(__FILE__) . '/authentication.php');
-/**#@-*/
+/* * #@- */
 
-if (! defined('DEFAULT_MAX_REDIRECTS')) {
+if (!defined('DEFAULT_MAX_REDIRECTS')) {
     define('DEFAULT_MAX_REDIRECTS', 3);
 }
-if (! defined('DEFAULT_CONNECTION_TIMEOUT')) {
+if (!defined('DEFAULT_CONNECTION_TIMEOUT')) {
     define('DEFAULT_CONNECTION_TIMEOUT', 15);
 }
 
@@ -29,6 +29,7 @@ if (! defined('DEFAULT_CONNECTION_TIMEOUT')) {
  *    @subpackage WebTester
  */
 class SimpleUserAgent {
+
     private $cookie_jar;
     private $cookies_enabled = true;
     private $authenticator;
@@ -118,7 +119,7 @@ class SimpleUserAgent {
      *    @access public
      */
     function getBaseCookieValue($name, $base) {
-        if (! $base) {
+        if (!$base) {
             return null;
         }
         return $this->getCookieValue($base->getHost(), $base->getPath(), $name);
@@ -169,12 +170,12 @@ class SimpleUserAgent {
      *    @access public
      */
     function useProxy($proxy, $username, $password) {
-        if (! $proxy) {
+        if (!$proxy) {
             $this->proxy = false;
             return;
         }
         if ((strncmp($proxy, 'http://', 7) != 0) && (strncmp($proxy, 'https://', 8) != 0)) {
-            $proxy = 'http://'. $proxy;
+            $proxy = 'http://' . $proxy;
         }
         $this->proxy = new SimpleUrl($proxy);
         $this->proxy_username = $username;
@@ -220,9 +221,7 @@ class SimpleUserAgent {
         if ($headers = $response->getHeaders()) {
             if ($headers->isChallenge()) {
                 $this->authenticator->addRealm(
-                        $url,
-                        $headers->getAuthentication(),
-                        $headers->getRealm());
+                        $url, $headers->getAuthentication(), $headers->getRealm());
             }
         }
         return $response;
@@ -247,13 +246,13 @@ class SimpleUserAgent {
             if ($this->cookies_enabled) {
                 $headers->writeCookiesToJar($this->cookie_jar, $url);
             }
-            if (! $headers->isRedirect()) {
+            if (!$headers->isRedirect()) {
                 break;
             }
             $location = new SimpleUrl($headers->getLocation());
             $url = $location->makeAbsolute($url);
             $encoding = new SimpleGetEncoding();
-        } while (! $this->isTooManyRedirects(++$redirects));
+        } while (!$this->isTooManyRedirects(++$redirects));
         return $response;
     }
 
@@ -306,10 +305,7 @@ class SimpleUserAgent {
     protected function createRoute($url) {
         if ($this->proxy) {
             return new SimpleProxyRoute(
-                    $url,
-                    $this->proxy,
-                    $this->proxy_username,
-                    $this->proxy_password);
+                    $url, $this->proxy, $this->proxy_username, $this->proxy_password);
         }
         return new SimpleRoute($url);
     }
@@ -324,5 +320,7 @@ class SimpleUserAgent {
             $request->addHeaderLine($header);
         }
     }
+
 }
+
 ?>

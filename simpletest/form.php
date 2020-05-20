@@ -1,18 +1,18 @@
 <?php
+
 /**
  *  Base include file for SimpleTest.
  *  @package    SimpleTest
  *  @subpackage WebTester
  *  @version    $Id: form.php 2013 2011-04-29 09:29:45Z pp11 $
  */
-
-/**#@+
+/* * #@+
  * include SimpleTest files
  */
 require_once(dirname(__FILE__) . '/tag.php');
 require_once(dirname(__FILE__) . '/encoding.php');
 require_once(dirname(__FILE__) . '/selector.php');
-/**#@-*/
+/* * #@- */
 
 /**
  *    Form tag class to hold widget values.
@@ -20,6 +20,7 @@ require_once(dirname(__FILE__) . '/selector.php');
  *    @subpackage WebTester
  */
 class SimpleForm {
+
     private $method;
     private $action;
     private $encoding;
@@ -94,7 +95,8 @@ class SimpleForm {
         if (($action === '') || ($action === false)) {
             return $page->expandUrl($page->getUrl());
         }
-        return $page->expandUrl(new SimpleUrl($action));;
+        return $page->expandUrl(new SimpleUrl($action));
+        ;
     }
 
     /**
@@ -104,7 +106,7 @@ class SimpleForm {
      */
     function getAction() {
         $url = $this->action;
-        if ($this->default_target && ! $url->getTarget()) {
+        if ($this->default_target && !$url->getTarget()) {
             $url->setTarget($this->default_target);
         }
         if ($this->getMethod() == 'get') {
@@ -173,7 +175,7 @@ class SimpleForm {
      *    @access private
      */
     protected function addRadioButton($tag) {
-        if (! isset($this->radios[$tag->getName()])) {
+        if (!isset($this->radios[$tag->getName()])) {
             $this->widgets[] = new SimpleRadioGroup();
             $this->radios[$tag->getName()] = count($this->widgets) - 1;
         }
@@ -186,12 +188,12 @@ class SimpleForm {
      *    @access private
      */
     protected function addCheckbox($tag) {
-        if (! isset($this->checkboxes[$tag->getName()])) {
+        if (!isset($this->checkboxes[$tag->getName()])) {
             $this->widgets[] = $tag;
             $this->checkboxes[$tag->getName()] = count($this->widgets) - 1;
         } else {
             $index = $this->checkboxes[$tag->getName()];
-            if (! SimpleTestCompatibility::isA($this->widgets[$index], 'SimpleCheckboxGroup')) {
+            if (!SimpleTestCompatibility::isA($this->widgets[$index], 'SimpleCheckboxGroup')) {
                 $previous = $this->widgets[$index];
                 $this->widgets[$index] = new SimpleCheckboxGroup();
                 $this->widgets[$index]->addWidget($previous);
@@ -230,13 +232,13 @@ class SimpleForm {
      *                                      present, nothing will be set.
      *    @access public
      */
-    function setField($selector, $value, $position=false) {
+    function setField($selector, $value, $position = false) {
         $success = false;
         $_position = 0;
         for ($i = 0, $count = count($this->widgets); $i < $count; $i++) {
             if ($selector->isMatch($this->widgets[$i])) {
                 $_position++;
-                if ($position === false or $_position === (int)$position) {
+                if ($position === false or $_position === (int) $position) {
                     if ($this->widgets[$i]->setValue($value)) {
                         $success = true;
                     }
@@ -357,5 +359,7 @@ class SimpleForm {
         }
         return $encoding;
     }
+
 }
+
 ?>

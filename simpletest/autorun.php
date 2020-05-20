@@ -1,19 +1,19 @@
 <?php
+
 /**
  *  Autorunner which runs all tests cases found in a file
  *  that includes this module.
  *  @package    SimpleTest
  *  @version    $Id: autorun.php 2037 2011-11-30 17:58:21Z pp11 $
  */
-
-/**#@+
+/* * #@+
  * include simpletest files
  */
 require_once dirname(__FILE__) . '/unit_tester.php';
 require_once dirname(__FILE__) . '/mock_objects.php';
 require_once dirname(__FILE__) . '/collector.php';
 require_once dirname(__FILE__) . '/default_reporter.php';
-/**#@-*/
+/* * #@- */
 
 $GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_CLASSES'] = get_declared_classes();
 $GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_PATH'] = getcwd();
@@ -23,7 +23,7 @@ register_shutdown_function('simpletest_autorun');
  *    Exit handler to run all recent test cases and exit system if in CLI
  */
 function simpletest_autorun() {
-	chdir($GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_PATH']);
+    chdir($GLOBALS['SIMPLETEST_AUTORUNNER_INITIAL_PATH']);
     if (tests_have_run()) {
         return;
     }
@@ -49,8 +49,7 @@ function run_local_tests() {
         $candidates = capture_new_classes();
         $loader = new SimpleFileLoader();
         $suite = $loader->createSuiteFromClasses(
-                basename(initial_file()),
-                $loader->selectRunnableTests($candidates));
+                basename(initial_file()), $loader->selectRunnableTests($candidates));
         return $suite->run(new DefaultReporter());
     } catch (Exception $stack_frame_fix) {
         print $stack_frame_fix->getMessage();
@@ -65,7 +64,7 @@ function run_local_tests() {
  */
 function tests_have_run() {
     if ($context = SimpleTest::getContext()) {
-        return (boolean)$context->getTest();
+        return (boolean) $context->getTest();
     }
     return false;
 }
@@ -76,7 +75,7 @@ function tests_have_run() {
  */
 function initial_file() {
     static $file = false;
-    if (! $file) {
+    if (!$file) {
         if (isset($_SERVER, $_SERVER['SCRIPT_FILENAME'])) {
             $file = $_SERVER['SCRIPT_FILENAME'];
         } else {
@@ -94,8 +93,8 @@ function initial_file() {
  */
 function capture_new_classes() {
     global $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES;
-    return array_map('strtolower', array_diff(get_declared_classes(),
-                            $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES ?
-                            $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES : array()));
+    return array_map('strtolower', array_diff(get_declared_classes(), $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES ?
+                    $SIMPLETEST_AUTORUNNER_INITIAL_CLASSES : array()));
 }
+
 ?>

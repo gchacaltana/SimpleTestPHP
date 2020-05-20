@@ -1,4 +1,5 @@
 <?php
+
 /**
  *  Base include file for SimpleTest
  *  @package    SimpleTest
@@ -16,6 +17,7 @@ require_once(dirname(__FILE__) . '/http.php');
  *    @subpackage WebTester
  */
 class SimpleRealm {
+
     private $type;
     private $root;
     private $username;
@@ -121,6 +123,7 @@ class SimpleRealm {
     protected function isIn($part, $whole) {
         return strpos($whole, $part) === 0;
     }
+
 }
 
 /**
@@ -129,6 +132,7 @@ class SimpleRealm {
  *    @subpackage WebTester
  */
 class SimpleAuthenticator {
+
     private $realms;
 
     /**
@@ -189,7 +193,7 @@ class SimpleAuthenticator {
      *    @access private
      */
     protected function findRealmFromUrl($url) {
-        if (! isset($this->realms[$url->getHost()])) {
+        if (!isset($this->realms[$url->getHost()])) {
             return false;
         }
         foreach ($this->realms[$url->getHost()] as $name => $realm) {
@@ -230,8 +234,10 @@ class SimpleAuthenticator {
     static function addBasicHeaders(&$request, $username, $password) {
         if ($username && $password) {
             $request->addHeaderLine(
-                'Authorization: Basic ' . base64_encode("$username:$password"));
+                    'Authorization: Basic ' . base64_encode("$username:$password"));
         }
     }
+
 }
+
 ?>

@@ -1,18 +1,18 @@
 <?php
+
 /**
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
  *  @version    $Id: http.php 2011 2011-04-29 08:22:48Z pp11 $
  */
-
-/**#@+
+/* * #@+
  *  include other SimpleTest class files
  */
 require_once(dirname(__FILE__) . '/socket.php');
 require_once(dirname(__FILE__) . '/cookies.php');
 require_once(dirname(__FILE__) . '/url.php');
-/**#@-*/
+/* * #@- */
 
 /**
  *    Creates HTTP headers for the end point of
@@ -21,6 +21,7 @@ require_once(dirname(__FILE__) . '/url.php');
  *    @subpackage WebTester
  */
 class SimpleRoute {
+
     private $url;
 
     /**
@@ -75,11 +76,8 @@ class SimpleRoute {
     function createConnection($method, $timeout) {
         $default_port = ('https' == $this->url->getScheme()) ? 443 : 80;
         $socket = $this->createSocket(
-                $this->url->getScheme() ? $this->url->getScheme() : 'http',
-                $this->url->getHost(),
-                $this->url->getPort() ? $this->url->getPort() : $default_port,
-                $timeout);
-        if (! $socket->isError()) {
+                $this->url->getScheme() ? $this->url->getScheme() : 'http', $this->url->getHost(), $this->url->getPort() ? $this->url->getPort() : $default_port, $timeout);
+        if (!$socket->isError()) {
             $socket->write($this->getRequestLine($method) . "\r\n");
             $socket->write($this->getHostLine() . "\r\n");
             $socket->write("Connection: close\r\n");
@@ -105,6 +103,7 @@ class SimpleRoute {
             return new SimpleSocket($host, $port, $timeout);
         }
     }
+
 }
 
 /**
@@ -114,6 +113,7 @@ class SimpleRoute {
  *    @subpackage WebTester
  */
 class SimpleProxyRoute extends SimpleRoute {
+
     private $proxy;
     private $username;
     private $password;
@@ -169,10 +169,7 @@ class SimpleProxyRoute extends SimpleRoute {
      */
     function createConnection($method, $timeout) {
         $socket = $this->createSocket(
-                $this->proxy->getScheme() ? $this->proxy->getScheme() : 'http',
-                $this->proxy->getHost(),
-                $this->proxy->getPort() ? $this->proxy->getPort() : 8080,
-                $timeout);
+                $this->proxy->getScheme() ? $this->proxy->getScheme() : 'http', $this->proxy->getHost(), $this->proxy->getPort() ? $this->proxy->getPort() : 8080, $timeout);
         if ($socket->isError()) {
             return $socket;
         }
@@ -186,6 +183,7 @@ class SimpleProxyRoute extends SimpleRoute {
         $socket->write("Connection: close\r\n");
         return $socket;
     }
+
 }
 
 /**
@@ -195,6 +193,7 @@ class SimpleProxyRoute extends SimpleRoute {
  *    @subpackage WebTester
  */
 class SimpleHttpRequest {
+
     private $route;
     private $encoding;
     private $headers;
@@ -226,7 +225,7 @@ class SimpleHttpRequest {
      */
     function fetch($timeout) {
         $socket = $this->route->createConnection($this->encoding->getMethod(), $timeout);
-        if (! $socket->isError()) {
+        if (!$socket->isError()) {
             $this->dispatchRequest($socket, $this->encoding);
         }
         return $this->createResponse($socket);
@@ -280,12 +279,11 @@ class SimpleHttpRequest {
      */
     protected function createResponse($socket) {
         $response = new SimpleHttpResponse(
-                $socket,
-                $this->route->getUrl(),
-                $this->encoding);
+                $socket, $this->route->getUrl(), $this->encoding);
         $socket->close();
         return $response;
     }
+
 }
 
 /**
@@ -294,6 +292,7 @@ class SimpleHttpRequest {
  *    @subpackage WebTester
  */
 class SimpleHttpHeaders {
+
     private $raw_headers;
     private $response_code;
     private $http_version;
@@ -346,7 +345,7 @@ class SimpleHttpHeaders {
      *    @access public
      */
     function getResponseCode() {
-        return (integer)$this->response_code;
+        return (integer) $this->response_code;
     }
 
     /**
@@ -366,7 +365,7 @@ class SimpleHttpHeaders {
      */
     function isRedirect() {
         return in_array($this->response_code, array(301, 302, 303, 307)) &&
-                (boolean)$this->getLocation();
+                (boolean) $this->getLocation();
     }
 
     /**
@@ -377,8 +376,8 @@ class SimpleHttpHeaders {
      */
     function isChallenge() {
         return ($this->response_code == 401) &&
-                (boolean)$this->authentication &&
-                (boolean)$this->realm;
+                (boolean) $this->authentication &&
+                (boolean) $this->realm;
     }
 
     /**
@@ -417,11 +416,7 @@ class SimpleHttpHeaders {
     function writeCookiesToJar($jar, $url) {
         foreach ($this->cookies as $cookie) {
             $jar->setCookie(
-                    $cookie->getName(),
-                    $cookie->getValue(),
-                    $url->getHost(),
-                    $cookie->getPath(),
-                    $cookie->getExpiry());
+                    $cookie->getName(), $cookie->getValue(), $url->getHost(), $cookie->getPath(), $cookie->getExpiry());
         }
     }
 
@@ -467,11 +462,9 @@ class SimpleHttpHeaders {
             }
         }
         return new SimpleCookie(
-                $cookie[1],
-                trim($cookie[2]),
-                isset($cookie["path"]) ? $cookie["path"] : "",
-                isset($cookie["expires"]) ? $cookie["expires"] : false);
+                $cookie[1], trim($cookie[2]), isset($cookie["path"]) ? $cookie["path"] : "", isset($cookie["expires"]) ? $cookie["expires"] : false);
     }
+
 }
 
 /**
@@ -480,6 +473,7 @@ class SimpleHttpHeaders {
  *    @subpackage WebTester
  */
 class SimpleHttpResponse extends SimpleStickyError {
+
     private $url;
     private $encoding;
     private $sent;
@@ -515,13 +509,13 @@ class SimpleHttpResponse extends SimpleStickyError {
      *    @access private
      */
     protected function parse($raw) {
-        if (! $raw) {
+        if (!$raw) {
             $this->setError('Nothing fetched');
             $this->headers = new SimpleHttpHeaders('');
         } elseif ('file' == $this->url->getScheme()) {
             $this->headers = new SimpleHttpHeaders('');
             $this->content = $raw;
-        } elseif (! strstr($raw, "\r\n\r\n")) {
+        } elseif (!strstr($raw, "\r\n\r\n")) {
             $this->setError('Could not split headers from content');
             $this->headers = new SimpleHttpHeaders($raw);
         } else {
@@ -605,7 +599,7 @@ class SimpleHttpResponse extends SimpleStickyError {
      */
     protected function readAll($socket) {
         $all = '';
-        while (! $this->isLastPacket($next = $socket->read())) {
+        while (!$this->isLastPacket($next = $socket->read())) {
             $all .= $next;
         }
         return $all;
@@ -622,7 +616,9 @@ class SimpleHttpResponse extends SimpleStickyError {
         if (is_string($packet)) {
             return $packet === '';
         }
-        return ! $packet;
+        return !$packet;
     }
+
 }
+
 ?>
