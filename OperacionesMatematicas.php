@@ -1,36 +1,31 @@
 <?php
 
 /**
- * Clase operaciones matemáticas, para ejemplo SimpleTest PHP.
+ * Clase de operaciones matemáticas en SimpleTest PHP.
  *
- * @author Gonzalo Chacaltana B <gchacaltanab@gmail.com>
+ * @author Gonzalo Chacaltana<gchacaltanab@outlook.com>
  * @name OperacionesMatematicas
  * @category class
  */
-class OperacionesMatematicas
-{
+class OperacionesMatematicas {
 
-    private $a;
-    private $b;
+    private $_a;
+    private $_b;
 
-    public function getA()
-    {
-        return $this->a;
+    public function getA() {
+        return $this->_a;
     }
 
-    public function setA($a)
-    {
-        $this->a = $a;
+    public function setA($a) {
+        $this->_a = $a;
     }
 
-    public function getB()
-    {
-        return $this->b;
+    public function getB() {
+        return $this->_b;
     }
 
-    public function setB($b)
-    {
-        $this->b = $b;
+    public function setB($b) {
+        $this->_b = $b;
     }
 
     /**
@@ -38,45 +33,24 @@ class OperacionesMatematicas
      * @param int $b, segundo valor numérico.
      * @access public
      */
-    public function __construct($a, $b)
-    {
+    public function __construct(float $a, float $b) {
         $this->setA($a);
         $this->setB($b);
     }
 
-    /**
-     * @access public
-     * @return int suma
-     */
-    public function sumar()
-    {
+    public function sumar() {
         return $this->getA() + $this->getB();
     }
 
-    /**
-     * @access public
-     * @return int resta
-     */
-    public function restar()
-    {
+    public function restar() {
         return $this->getA() - $this->getB();
     }
 
-    /**
-     * @access public
-     * @return int Multiplicación
-     */
-    public function multiplicar()
-    {
+    public function multiplicar() {
         return $this->getA() * $this->getB();
     }
 
-    /**
-     * @access public
-     * @return int Division
-     */
-    public function dividir()
-    {
+    public function dividir() {
         if ($this->getB() != 0) {
             return $this->getA() / $this->getB();
         }
